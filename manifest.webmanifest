@@ -1,0 +1,15 @@
+{
+  "name": "Voz a LSM",
+  "short_name": "Voz a LSM",
+  "description": "Voz en español a Lengua de Señas Mexicana con avatar, y señas a voz con la cámara.",
+  "lang": "es-MX",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EDF1F6",
+  "theme_color": "#2A55C4",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
