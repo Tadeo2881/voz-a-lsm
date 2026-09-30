@@ -3,7 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Voz a LSM con avatar, y señas a voz con la cámara. Incluye grabadora de señas.">
+<meta name="description" content="Voz en español a Lengua de Señas Mexicana con avatar, y señas a voz con la cámara.">
+<meta name="theme-color" content="#2A55C4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Voz a LSM">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Voz a LSM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,7 +121,7 @@ body.pip-body{margin:0;background:var(--stage);overflow:hidden}
 .stage.green .heard{color:#C9D2E0}
 body.obs{background:var(--chroma);overflow:hidden}
 body.obs .wrap{padding:0;max-width:none;display:block}
-body.obs header,body.obs .panel,body.obs .about{display:none}
+body.obs header,body.obs .panel,body.obs .about,body.obs .tabs{display:none}
 body.obs .grid{display:block}
 body.obs .stage{position:fixed;inset:0;border-radius:0;display:flex;flex-direction:column}
 body.obs .stage svg{flex:1;min-height:0;max-height:none}
@@ -182,6 +190,59 @@ body.obs .rec{display:none}
 .check{display:inline-flex;gap:8px;align-items:center;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink)}
 .scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
 body.obs .rg{display:none}
+/* Pestañas */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px}
+.tab-btn{font:700 15px var(--f-body);padding:9px 14px;border-radius:999px;border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer}
+.tab-btn[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tab-btn:hover{color:var(--ink)}
+.conv-open{margin-left:auto;font:700 15px var(--f-body);padding:9px 16px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.tab{display:grid;gap:24px}
+.tag{font:600 11px var(--f-body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px;vertical-align:middle;margin-left:6px}
+/* Aprender */
+.learn-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.score{font:700 15px var(--f-gloss);font-variant-numeric:tabular-nums;color:var(--muted)}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.opt{font:700 16px var(--f-body);padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;text-transform:lowercase}
+.opt.right{background:#1E7B4B;border-color:#1E7B4B;color:#fff}
+.opt.wrong{background:#B4412F;border-color:#B4412F;color:#fff}
+.ln-fb{margin:0;min-height:1.5em;font-weight:700}
+.dy-word{margin:0;font:800 clamp(30px,5vw,44px) var(--f-display);text-transform:lowercase}
+.rec-view.small{aspect-ratio:4/3;max-height:280px}
+/* Ajustes */
+.settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px;align-items:start}
+.set-grid{display:grid;gap:14px}
+.flabel{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid var(--line)}
+.field textarea{font:13px var(--f-gloss);padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0;resize:vertical}
+.field input[type=password]{font:15px var(--f-body);padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0}
+.steps{margin:10px 0;padding-left:20px;display:grid;gap:6px;font-size:14px;color:var(--muted)}
+.steps a,.settings a{color:var(--accent)}
+.codebox{position:relative;border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:auto}
+.codebox pre{margin:0;padding:12px;font:12px/1.5 var(--f-gloss);white-space:pre;overflow-x:auto}
+.codebox button{position:absolute;top:6px;right:6px}
+/* Conversación */
+.conv{position:fixed;inset:0;z-index:20;background:var(--bg);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}
+.conv.table{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1.3fr)}
+.conv.table .conv-hear{transform:rotate(180deg)}
+@media (orientation:portrait){.conv{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1.3fr)}}
+.conv-half{min-height:0;min-width:0;overflow:hidden;position:relative}
+.conv-hear{display:flex;flex-direction:column;gap:10px;padding:16px;border-right:1px solid var(--line);background:var(--surface)}
+.conv-bar{display:flex;flex-wrap:wrap;gap:6px}
+.conv-bar [aria-pressed="true"]{background:var(--mark);color:var(--mark-ink);border-color:var(--mark)}
+.conv-label{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.conv-word{margin:0;font:800 clamp(40px,8vw,84px)/1 var(--f-display);overflow-wrap:anywhere}
+.conv-sent{margin:0;font-size:clamp(20px,3vw,30px);overflow-wrap:anywhere;flex:1;overflow:auto}
+.conv-deaf{display:flex;flex-direction:column;background:var(--stage)}
+#convSlot{flex:1;min-height:0;display:flex}
+#convSlot .stage{flex:1;display:flex;flex-direction:column;border-radius:0}
+#convSlot .stage svg{flex:1;min-height:0;max-height:none}
+#convSlot #nowGloss{font-size:22px}
+#convSlot .heard{font-size:clamp(18px,2.6vw,26px);color:var(--ink)}
+.conv-cam{position:absolute;right:10px;bottom:120px;width:min(32%,220px)}
+.conv-cam .rec-view{border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.conv-cam .rec-empty{display:none}
+body.conv-on{overflow:hidden}
 @media (prefers-reduced-motion: reduce){#mic[aria-pressed="true"] .dot{animation:none}}
 </style>
 <style>body{margin:0}</style>
@@ -193,7 +254,15 @@ body.obs .rg{display:none}
     <h1>Voz a LSM</h1>
     <p>Habla o escribe en español y el avatar lo interpreta en Lengua de Señas Mexicana. Las palabras que conoce las hace como seña; las demás las deletrea con el alfabeto manual.</p>
   </header>
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button role="tab" class="tab-btn" data-tab="traducir" aria-selected="true">Traducir</button>
+    <button role="tab" class="tab-btn" data-tab="aprender" aria-selected="false">Aprender</button>
+    <button role="tab" class="tab-btn" data-tab="grabar" aria-selected="false">Grabar señas</button>
+    <button role="tab" class="tab-btn" data-tab="ajustes" aria-selected="false">Ajustes</button>
+    <button class="conv-open" id="convOpen">Modo conversación</button>
+  </nav>
 
+  <div class="tab" id="tab-traducir">
   <div class="grid">
     <div id="stageSlot">
     <section class="stage" id="stage" aria-label="Avatar intérprete">
@@ -261,7 +330,7 @@ body.obs .rg{display:none}
     </div>
     <div class="rec-grid">
       <div class="rec-media">
-        <div class="rec-view"><video id="rgVid" class="mirror" playsinline muted></video><canvas id="rgOvl" class="mirror"></canvas>
+        <div class="rec-view" id="rgView"><video id="rgVid" class="mirror" playsinline muted></video><canvas id="rgOvl" class="mirror"></canvas>
           <div class="rg-state" id="rgState">Esperando seña</div>
           <div class="rec-empty" id="rgEmpty">Enciende la cámara. La persona debe verse de frente, con la cabeza, los hombros y las manos.</div></div>
         <div class="rec-tools">
@@ -285,7 +354,33 @@ body.obs .rg{display:none}
       </div>
     </div>
   </section>
+  </div>
+  <div class="tab" id="tab-aprender" hidden>
+    <div class="grid">
+      <div id="learnSlot"></div>
+      <div class="panel">
+        <div class="card">
+          <div class="learn-head"><h2>¿Qué seña es?</h2><span class="score" id="lnScore">0 de 0</span></div>
+          <p class="legend">El avatar hace una seña. Elige qué significa.</p>
+          <div class="rec-tools"><button class="btn primary" id="lnNext">Nueva seña</button><button class="btn" id="lnRepeat" disabled>Verla otra vez</button>
+            <label class="check" for="lnOnlyRec"><input type="checkbox" id="lnOnlyRec"> Solo señas grabadas</label></div>
+          <div class="opts" id="lnOpts"></div>
+          <p class="ln-fb" id="lnFb" aria-live="polite"></p>
+        </div>
+        <div class="card">
+          <div class="learn-head"><h2>Hazla tú</h2><span class="score" id="dyScore">0 de 0</span></div>
+          <p class="legend">Te doy una palabra, la haces frente a la cámara y te digo si te salió. Usa las señas grabadas de tu biblioteca.</p>
+          <p class="dy-word" id="dyWord">—</p>
+          <div class="rec-view small"><video id="dyVid" class="mirror" playsinline muted></video><canvas id="dyOvl" class="mirror"></canvas>
+            <div class="rg-state" id="dyState">Cámara apagada</div></div>
+          <div class="rec-tools"><button class="btn primary" id="dyCam">Encender cámara</button><button class="btn" id="dyNext">Otra palabra</button><button class="btn ghost" id="dyShow">Ver cómo se hace</button></div>
+          <p class="ln-fb" id="dyFb" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div class="tab" id="tab-grabar" hidden>
   <section class="card rec" id="recorder" aria-labelledby="recTitle">
     <div class="rec-head">
       <h2 id="recTitle">Grabadora de señas</h2>
@@ -346,6 +441,65 @@ body.obs .rg{display:none}
       </div>
     </details>
   </section>
+  </div>
+  <div class="tab" id="tab-ajustes" hidden>
+    <div class="settings">
+      <section class="card">
+        <h2>Avatar</h2>
+        <div class="set-grid">
+          <div class="field"><span class="flabel">Tono de piel</span><div class="chips" data-av="skin"></div></div>
+          <div class="field"><span class="flabel">Peinado</span><div class="chips" data-av="hairStyle"></div></div>
+          <div class="field"><span class="flabel">Color de cabello</span><div class="chips" data-av="hairColor"></div></div>
+          <div class="field"><span class="flabel">Ropa</span><div class="chips" data-av="shirt"></div></div>
+        </div>
+        <p class="legend">La ropa es lisa y oscura porque así visten los intérpretes: las manos se distinguen mejor.</p>
+      </section>
+
+      <section class="card">
+        <h2>Instalar como app</h2>
+        <p class="legend">En iPad o iPhone: abre la página en Safari, toca Compartir (el cuadro con la flecha) y elige «Agregar a pantalla de inicio». En Chrome o Edge de computadora: toca el ícono de instalar en la barra de direcciones. Se abre a pantalla completa y lo ya descargado funciona sin internet.</p>
+        <p class="legend" id="pwaState"></p>
+      </section>
+
+      <section class="card">
+        <h2>Traducción con IA <span class="tag">opcional</span></h2>
+        <p class="legend">Acomoda lo que dices al orden de la LSM antes de pasarlo al avatar, y convierte las palabras de «Señas a voz» en frases en español. Usa la API de Claude, que cobra por uso. La clave se guarda solo en este dispositivo; no la pongas en una computadora que usen otras personas.</p>
+        <div class="field"><label for="aiKey">Clave de API (empieza con sk-ant-)</label><input id="aiKey" type="password" autocomplete="off" placeholder="sk-ant-…"></div>
+        <div class="field"><label for="aiModel">Modelo</label><input id="aiModel" type="text" value="claude-haiku-4-5-20251001"></div>
+        <label class="check" for="aiVoice"><input type="checkbox" id="aiVoice"> Acomodar mi voz al orden de la LSM</label>
+        <label class="check" for="aiSigns"><input type="checkbox" id="aiSigns"> Convertir las señas en frases en español</label>
+        <div class="rec-tools"><button class="btn primary" id="aiSave">Guardar</button><button class="btn" id="aiTest">Probar</button><button class="btn ghost" id="aiForget">Borrar clave</button></div>
+        <p class="legend" id="aiState" aria-live="polite"></p>
+      </section>
+
+      <section class="card">
+        <h2>Biblioteca compartida <span class="tag">Firebase</span></h2>
+        <p class="legend">Las señas que grabe cualquier colaborador se guardan en línea y todos las ven al instante, sin exportar archivos. Cualquiera puede ver las señas; solo pueden agregarlas los correos que tú autorices.</p>
+        <p class="legend" id="fbState" aria-live="polite">Sin conectar.</p>
+        <div class="rec-tools"><button class="btn primary" id="fbLogin" hidden>Entrar con Google</button><button class="btn" id="fbLogout" hidden>Salir</button><button class="btn" id="fbPush" hidden>Subir mis señas a la nube</button></div>
+        <details class="sources">
+          <summary>Cómo conectarla (una sola vez)</summary>
+          <ol class="steps">
+            <li>En <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a> crea un proyecto (o usa uno que ya tengas).</li>
+            <li>Entra a <b>Firestore Database</b> → <b>Crear base de datos</b> → modo producción.</li>
+            <li>En Firestore → <b>Reglas</b>, pega las reglas de abajo con los correos de tus colaboradores y publica.</li>
+            <li>Entra a <b>Authentication</b> → <b>Comenzar</b> → activa <b>Google</b>. En <b>Configuración → Dominios autorizados</b> agrega <code id="fbDomain">tu-usuario.github.io</code>.</li>
+            <li>En <b>Configuración del proyecto</b> (engrane) → <b>Tus apps</b> → agrega una app web (&lt;/&gt;). Copia el bloque <code>firebaseConfig</code> y pégalo aquí:</li>
+          </ol>
+          <div class="field"><label for="fbConfig">firebaseConfig</label><textarea id="fbConfig" rows="6" placeholder="{ apiKey: &quot;…&quot;, authDomain: &quot;…&quot;, projectId: &quot;…&quot;, … }"></textarea></div>
+          <div class="field"><label for="fbEmails">Correos que pueden agregar señas, separados por coma</label><input id="fbEmails" type="text" placeholder="tu-correo@gmail.com, intérprete@gmail.com"></div>
+          <div class="rec-tools"><button class="btn primary" id="fbMake">Generar archivos</button></div>
+          <div id="fbOut" hidden>
+            <p class="legend">1. En GitHub crea un archivo nuevo (Add file → Create new file) llamado <code>firebase-config.json</code> con este texto:</p>
+            <div class="codebox"><pre id="fbJson"></pre><button class="btn sm" data-copy="fbJson">Copiar</button></div>
+            <p class="legend">2. Pega estas reglas en Firestore → Reglas y publica:</p>
+            <div class="codebox"><pre id="fbRules"></pre><button class="btn sm" data-copy="fbRules">Copiar</button></div>
+            <p class="legend">Mientras subes el archivo, la conexión ya funciona en este dispositivo.</p>
+          </div>
+        </details>
+      </section>
+    </div>
+  </div>
 
   <section class="about">
     <div><h3>Qué hace</h3><p>Funciona en los dos sentidos: con «Señas a voz» reconoce señas de tu biblioteca y las dice en voz alta. Además, convierte tu voz en texto, lo reordena en glosa (la forma en que se escribe una lengua de señas) y anima un avatar con la seña o el deletreo de cada palabra. Las preguntas cambian la expresión de la cara, porque en LSM las cejas marcan la pregunta.</p></div>
@@ -354,12 +508,31 @@ body.obs .rg{display:none}
     <p id="credits"></p>
   </section>
 </main>
+<div class="conv" id="conv" hidden>
+  <div class="conv-half conv-hear" id="convHear">
+    <div class="conv-bar">
+      <button class="btn sm" id="cvMic" aria-pressed="false">Escuchar</button>
+      <button class="btn sm" id="cvSay">Decir la frase</button>
+      <button class="btn sm ghost" id="cvClear">Borrar</button>
+      <button class="btn sm ghost" id="cvFlip">Voltear</button>
+      <button class="btn sm ghost" id="cvExit">Salir</button>
+    </div>
+    <p class="conv-label">Te dice en señas</p>
+    <p class="conv-word" id="cvWord">—</p>
+    <p class="conv-sent" id="cvSentence">Las palabras aparecen aquí.</p>
+    <p class="conv-label" id="cvStatus"></p>
+  </div>
+  <div class="conv-half conv-deaf">
+    <div id="convSlot"></div>
+    <div class="conv-cam" id="convCamSlot"></div>
+  </div>
+</div>
 
 <script>
 (()=>{
 const NS='http://www.w3.org/2000/svg', D2R=Math.PI/180;
 const svg=document.getElementById('av');
-function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||svg).appendChild(e);return e;}
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs){const v=attrs[k];if(typeof v==='string'&&v.startsWith('var(')&&(k==='fill'||k==='stroke'))e.style.setProperty(k,v);else e.setAttribute(k,v);}(parent||svg).appendChild(e);return e;}
 
 /* ---------- Handshapes: curl of index,middle,ring,pinky (0 straight..1 fist), spread, thumb angle & length ---------- */
 const SH={
@@ -416,14 +589,29 @@ const WH=/\b(qué|que|cómo|dónde|quién|quiénes|cuándo|cuánto|cuántos|cuá
 
 /* ---------- Avatar ilustrado ---------- */
 const SHO={R:{x:145,y:204},L:{x:255,y:204}}, UA=88, FA=84;
-const C={skin:'#C68A62',skinLt:'#DDA881',skinDk:'#A36A47',edge:'#6B3F27',lip:'#B0634F',lipDk:'#7A3A2E',hair:'#211613',hairLt:'#4E3629',iris:'#4A2D1B',white:'#F6F1EC',shirt:'#1E2434',shirtLt:'#3A4662',shirtDk:'#0F131C'};
+const C={};['skin','skinLt','skinDk','edge','lip','lipDk','hair','hairLt','iris','white','shirt','shirtMid','shirtLt','shirtDk'].forEach(k=>C[k]='var(--av-'+k+')');
+/* Opciones del avatar: tono de piel, cabello y ropa (colores oscuros y lisos, como visten los intérpretes) */
+const AV={
+  skin:{media:['#C68A62','#DDA881','#A36A47','#6B3F27','#B0634F','#7A3A2E'],clara:['#E7B893','#F5D1B1','#C8936D','#8A5A3C','#C27463','#8E4A3C'],morena:['#8D5A3B','#A8704D','#6E4229','#3E2416','#8A4A3C','#5A2A22'],trigueña:['#B98B5E','#D1A77A','#94683F','#5E3E22','#A8624E','#743B2F']},
+  hairColor:{negro:['#211613','#4E3629'],castaño:['#4A2C1A','#7A4F33'],canoso:['#8C8A88','#C4C2BF'],rojizo:['#6B2E1A','#A0522D']},
+  shirt:{marino:['#1E2434','#283047','#3A4662','#0F131C'],negro:['#17181C','#222329','#393B44','#0A0A0C'],vino:['#3A1520','#4A1C2A','#6A3040','#200A10'],verde:['#16302A','#1E3E36','#315A50','#0A1814']}
+};
+const avDefault={skin:'media',hairColor:'negro',hairStyle:'corto',shirt:'marino'};
+let avCfg={...avDefault};try{Object.assign(avCfg,JSON.parse(localStorage.getItem('lsm-avatar')||'{}'));}catch(e){}
+function applyAvatar(){
+  const st=svg.style, sk=AV.skin[avCfg.skin]||AV.skin.media, hc=AV.hairColor[avCfg.hairColor]||AV.hairColor.negro, sh=AV.shirt[avCfg.shirt]||AV.shirt.marino;
+  [['skin',sk[0]],['skinLt',sk[1]],['skinDk',sk[2]],['edge',sk[3]],['lip',sk[4]],['lipDk',sk[5]],['hair',hc[0]],['hairLt',hc[1]],['iris','#4A2D1B'],['white','#F6F1EC'],['shirt',sh[0]],['shirtMid',sh[1]],['shirtLt',sh[2]],['shirtDk',sh[3]]].forEach(([k,v])=>st.setProperty('--av-'+k,v));
+  try{hairLong.style.display=avCfg.hairStyle==='largo'?'':'none';hairBun.style.display=avCfg.hairStyle==='chongo'?'':'none';}catch(e){}
+  try{localStorage.setItem('lsm-avatar',JSON.stringify(avCfg));}catch(e){}
+}
+applyAvatar();
 const defs=el('defs',{});
 defs.innerHTML=`
-<radialGradient id="gFace" gradientUnits="userSpaceOnUse" cx="194" cy="92" r="78"><stop offset="0" stop-color="${C.skinLt}"/><stop offset=".62" stop-color="${C.skin}"/><stop offset="1" stop-color="${C.skinDk}"/></radialGradient>
-<radialGradient id="gHand" cx="40%" cy="35%" r="80%"><stop offset="0" stop-color="${C.skinLt}"/><stop offset=".7" stop-color="${C.skin}"/><stop offset="1" stop-color="${C.skinDk}"/></radialGradient>
-<linearGradient id="gNeck" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.skinDk}"/><stop offset=".5" stop-color="${C.skin}"/></linearGradient>
-<linearGradient id="gShirt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${C.shirtDk}"/><stop offset=".28" stop-color="${C.shirt}"/><stop offset=".5" stop-color="#283047"/><stop offset=".75" stop-color="${C.shirt}"/><stop offset="1" stop-color="${C.shirtDk}"/></linearGradient>
-<linearGradient id="gHair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${C.hairLt}"/><stop offset=".45" stop-color="${C.hair}"/></linearGradient>
+<radialGradient id="gFace" gradientUnits="userSpaceOnUse" cx="194" cy="92" r="78"><stop offset="0" style="stop-color:${C.skinLt}"/><stop offset=".62" style="stop-color:${C.skin}"/><stop offset="1" style="stop-color:${C.skinDk}"/></radialGradient>
+<radialGradient id="gHand" cx="40%" cy="35%" r="80%"><stop offset="0" style="stop-color:${C.skinLt}"/><stop offset=".7" style="stop-color:${C.skin}"/><stop offset="1" style="stop-color:${C.skinDk}"/></radialGradient>
+<linearGradient id="gNeck" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:${C.skinDk}"/><stop offset=".5" style="stop-color:${C.skin}"/></linearGradient>
+<linearGradient id="gShirt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:${C.shirtDk}"/><stop offset=".28" style="stop-color:${C.shirt}"/><stop offset=".5" style="stop-color:${C.shirtMid}"/><stop offset=".75" style="stop-color:${C.shirt}"/><stop offset="1" style="stop-color:${C.shirtDk}"/></linearGradient>
+<linearGradient id="gHair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:${C.hairLt}"/><stop offset=".45" style="stop-color:${C.hair}"/></linearGradient>
 <radialGradient id="gBack" cx="50%" cy="28%" r="75%"><stop offset="0" style="stop-color:var(--stage-glow)"/><stop offset="1" style="stop-color:var(--stage)"/></radialGradient>
 <filter id="fShadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="1.5" dy="3" stdDeviation="2.2" flood-color="#000" flood-opacity=".3"/></filter>
 <filter id="fSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
@@ -441,6 +629,8 @@ el('path',{d:'M176 190 Q200 210 224 190 Q200 202 176 190 Z',fill:C.skinDk,opacit
 
 const head=el('g',{});
 el('ellipse',{cx:200,cy:90,rx:53,ry:52,fill:C.hair},head);
+const hairLong=el('path',{d:'M149 92 Q138 160 156 204 Q170 212 186 202 Q168 168 170 120 L230 120 Q232 168 214 202 Q230 212 244 204 Q262 160 251 92 Z',fill:'url(#gHair)'},head);
+const hairBun=el('circle',{cx:200,cy:40,r:17,fill:'url(#gHair)'},head);
 [[152,1],[248,-1]].forEach(([x,s])=>{
   el('path',{d:`M${x+s*2} 94 Q${x-s*10} 90 ${x-s*9} 106 Q${x-s*8} 120 ${x+s*3} 118 Z`,fill:C.skin,stroke:C.edge,'stroke-width':1.4},head);
   el('path',{d:`M${x-s*4} 98 Q${x-s*6} 106 ${x-s*1} 112`,fill:'none',stroke:C.skinDk,'stroke-width':1.6,'stroke-linecap':'round'},head);
@@ -462,6 +652,7 @@ const eyes=[[182,'cEyeL'],[218,'cEyeR']].map(([x,clip])=>{
   el('path',{d:`M${x-8} 107.5 Q${x} 110.5 ${x+8} 107.5`,fill:'none',stroke:C.skinDk,'stroke-width':1,opacity:.7},g);
   return{x,lid,lidSkin};
 });
+applyAvatar();
 const browL=el('path',{fill:'none',stroke:C.hair,'stroke-width':4,'stroke-linecap':'round'},head);
 const browR=el('path',{fill:'none',stroke:C.hair,'stroke-width':4,'stroke-linecap':'round'},head);
 el('path',{d:'M197 104 Q195 116 191 121 Q195 126 200 125 Q205 126 209 121',fill:'none',stroke:C.edge,'stroke-width':1.6,'stroke-linecap':'round',opacity:.85},head);
@@ -690,7 +881,7 @@ let cur=poseOf({},BASEFACE,0), keys=[], ki=0, from=cur, prog=0, last=0, playing=
 const raf=cb=>(pipWin&&!pipWin.closed?pipWin:window).requestAnimationFrame(cb);
 let loopGen=0;
 function startLoop(){const g=++loopGen;const f=now=>{if(g!==loopGen)return;tick(now);raf(f);};raf(f);}
-function enqueue(text,fresh){enqueueA(analyze(text),fresh);}
+let enqueue=function(text,fresh){enqueueA(analyze(text),fresh);};
 function enqueueA(A,fresh){
   if(fresh){clearGloss();keys=[];ki=0;playing=false;}
   if(!A.toks.length){emptyGloss();return;}
@@ -735,7 +926,7 @@ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 const obsMic=document.getElementById('obsMic'), mic=document.getElementById('mic'), micLabel=document.getElementById('micLabel'), note=document.getElementById('micNote'), pipMic=document.getElementById('pipMic');
 let rec=null, wantListen=false;
 function say(msg){note.textContent=msg;note.hidden=!msg;}
-function setUI(on){mic.setAttribute('aria-pressed',on);pipMic.setAttribute('aria-pressed',on);obsMic.setAttribute('aria-pressed',on);obsMic.textContent=on?'Detener':'Escuchar';micLabel.textContent=on?'Escuchando… toca para detener':'Empezar a escuchar';pipMic.textContent=on?'Detener':'Escuchar';}
+function setUI(on){const cv=document.getElementById('cvMic');if(cv){cv.setAttribute('aria-pressed',on);cv.textContent=on?'Escuchando…':'Escuchar';}mic.setAttribute('aria-pressed',on);pipMic.setAttribute('aria-pressed',on);obsMic.setAttribute('aria-pressed',on);obsMic.textContent=on?'Detener':'Escuchar';micLabel.textContent=on?'Escuchando… toca para detener':'Empezar a escuchar';pipMic.textContent=on?'Detener':'Escuchar';}
 function stopListening(){wantListen=false;setUI(false);if(rec)try{rec.stop();}catch(e){}}
 function startListening(){
   if(!SR){say('Este navegador no ofrece reconocimiento de voz. Abre la página en Chrome o Edge, o escribe tu frase abajo.');return;}
@@ -796,7 +987,7 @@ document.getElementById('pipBtn').onclick=async()=>{
   d.body.className='pip-body';
   stage.classList.add('in-pip'); d.body.appendChild(stage); away.hidden=false;
   startLoop();
-  pipWin.addEventListener('pagehide',()=>{stage.classList.remove('in-pip');slot.prepend(stage);away.hidden=true;pipWin=null;startLoop();});
+  pipWin.addEventListener('pagehide',()=>{stage.classList.remove('in-pip');pipWin=null;away.hidden=true;placeStage();startLoop();});
   if(!wantListen)startListening();
 };
 document.getElementById('backBtn').onclick=()=>{if(pipWin)pipWin.close();};
@@ -806,6 +997,7 @@ document.getElementById('backBtn').onclick=()=>{if(pipWin)pipWin.close();};
    Grabadora de señas: cámara o video → puntos de manos, brazos y cara
    ===================================================================== */
 const $=id=>document.getElementById(id);
+let onSaved=null, onDeleted=null;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 const vid=$('recVid'), ovl=$('recOvl'), recStatusEl=$('recStatus');
@@ -841,6 +1033,7 @@ async function saveSign(sg,asExample){
   LIB.all.set(sg.id,sg);
   try{await DB.put(sg);}catch(e){recStatus('La seña se usa ahora, pero este navegador no la pudo guardar. Exporta signs.json para no perderla.',true);}
   indexLib();
+  if(typeof onSaved==='function')onSaved(sg);
 }
 function renderVocab(){
   const rec=[...LIB.all.values()].filter(s=>!s.example).map(s=>s.gloss.toUpperCase()).sort();
@@ -862,6 +1055,7 @@ $('libList').addEventListener('click',async e=>{
   if(d){
     if(d.dataset.confirm!=='1'){d.dataset.confirm='1';d.textContent='¿Seguro?';setTimeout(()=>{if(d.isConnected){d.dataset.confirm='';d.textContent='Borrar';}},3000);return;}
     const sg=LIB.all.get(d.dataset.del); LIB.all.delete(d.dataset.del); try{await DB.del(d.dataset.del);}catch(err){}
+    if(typeof onDeleted==='function')onDeleted(d.dataset.del);
     indexLib(); if(sg&&sg.origin==='repo')recStatus('Borrada en esta computadora. Para quitarla para todos, exporta signs.json y súbelo a GitHub.');
   }
 });
@@ -1226,7 +1420,239 @@ renderSentence();
 window.LSM.recognize=recognize;window.LSM.makeSegmenter=makeSegmenter;window.LSM.signFeat=signFeat;
 
 
-setTimeout(()=>{heard(txt.value);enqueue(txt.value,true);},700);
+
+/* =====================================================================
+   Pestañas, ajustes del avatar, conversación, aprender, IA, nube, app
+   ===================================================================== */
+let activeTab='traducir';
+function placeStage(){
+  if(pipWin&&!pipWin.closed)return;
+  const target=!$('conv').hidden?$('convSlot'):activeTab==='aprender'?$('learnSlot'):$('stageSlot');
+  if(stage.parentElement!==target)target.prepend(stage);
+}
+function showTab(t){
+  activeTab=t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===t)));
+  ['traducir','aprender','grabar','ajustes'].forEach(x=>$('tab-'+x).hidden=x!==t);
+  if(t!=='aprender'&&dy.on)dyStop();
+  if(t!=='grabar'&&camOn)stopCam();
+  if(t!=='traducir'&&rgOn&&$('conv').hidden)stopRg();
+  placeStage();
+  try{localStorage.setItem('lsm-tab',t);}catch(e){}
+}
+document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+$('obsBtn').addEventListener('click',()=>showTab('traducir'),true);
+
+/* ---- Avatar ---- */
+const AVL={skin:{media:'Media',clara:'Clara',trigueña:'Trigueña',morena:'Morena'},hairStyle:{corto:'Corto',largo:'Largo',chongo:'Chongo'},
+  hairColor:{negro:'Negro',castaño:'Castaño',rojizo:'Rojizo',canoso:'Canoso'},shirt:{marino:'Azul marino',negro:'Negro',vino:'Vino',verde:'Verde oscuro'}};
+document.querySelectorAll('[data-av]').forEach(box=>{
+  const key=box.dataset.av;
+  box.innerHTML=Object.entries(AVL[key]).map(([v,l])=>{const sw=key==='skin'?AV.skin[v][0]:key==='hairColor'?AV.hairColor[v][0]:key==='shirt'?AV.shirt[v][0]:null;
+    return`<button class="chip" data-v="${v}" aria-pressed="${avCfg[key]===v}">${sw?`<span class="sw" style="background:${sw}"></span>`:''}${l}</button>`;}).join('');
+  box.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;avCfg[key]=b.dataset.v;applyAvatar();box.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));};
+});
+
+/* ---- Modo conversación ---- */
+function syncConv(){$('cvSentence').textContent=sentence.length?sentence.join(' '):'Las palabras aparecen aquí.';$('cvWord').textContent=$('rgWord').textContent;}
+new MutationObserver(syncConv).observe($('rgWord'),{childList:true,characterData:true,subtree:true});
+new MutationObserver(syncConv).observe($('rgSentence'),{childList:true,characterData:true,subtree:true});
+async function openConv(){
+  if(pipWin&&!pipWin.closed)pipWin.close();
+  if(document.body.classList.contains('obs'))exitObs();
+  $('conv').hidden=false;document.body.classList.add('conv-on');placeStage();
+  $('convCamSlot').appendChild($('rgView'));syncConv();
+  if(!wantListen)startListening();
+  if(LIB.all.size){if(!rgOn)startRg();$('cvStatus').textContent='';}
+  else $('cvStatus').textContent='Tu biblioteca no tiene señas grabadas. Por ahora solo funciona de voz a señas.';
+  try{if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();}catch(e){}
+}
+function closeConv(){
+  $('conv').hidden=true;document.body.classList.remove('conv-on');placeStage();
+  $('signs2voice').querySelector('.rec-media').prepend($('rgView'));
+  if(wantListen)stopListening(); if(rgOn)stopRg();
+  if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+}
+$('convOpen').onclick=openConv; $('cvExit').onclick=closeConv;
+$('cvFlip').onclick=()=>$('conv').classList.toggle('table');
+$('cvMic').onclick=()=>toggle();
+$('cvSay').onclick=()=>$('rgSay').click();
+$('cvClear').onclick=()=>$('rgClear').click();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('conv').hidden)closeConv();});
+
+/* ---- Aprender: ¿Qué seña es? ---- */
+const ln={cur:null,ok:0,n:0,answered:false};
+function pool(){
+  const rec=[...LIB.all.values()].filter(s=>!s.example).map(s=>({gloss:s.gloss.toUpperCase(),word:wordOf(s),sign:s}));
+  if($('lnOnlyRec').checked)return rec;
+  return rec.concat(Object.keys(SIGNS).filter(g=>!rec.some(r=>r.gloss===g)).map(g=>({gloss:g,word:g.toLowerCase()})));
+}
+function playItem(it){if(it.sign)playSign(it.sign);else enqueueA({toks:[{type:'sign',gloss:it.gloss,word:it.word}],face:BASEFACE},true);}
+$('lnNext').onclick=()=>{
+  const P=pool();
+  if(P.length<4){$('lnFb').textContent='Hacen falta al menos 4 señas. Quita «Solo señas grabadas» o graba más.';return;}
+  let cur;do{cur=P[Math.floor(Math.random()*P.length)];}while(P.length>1&&ln.cur&&cur.gloss===ln.cur.gloss);
+  const opts=[cur,...P.filter(x=>x.gloss!==cur.gloss).sort(()=>Math.random()-.5).slice(0,3)].sort(()=>Math.random()-.5);
+  ln.cur=cur;ln.answered=false;$('lnFb').textContent='';$('lnRepeat').disabled=false;
+  $('lnOpts').innerHTML=opts.map(o=>`<button class="opt" data-g="${esc(o.gloss)}">${esc(o.word)}</button>`).join('');
+  playItem(cur);
+};
+$('lnRepeat').onclick=()=>{if(ln.cur)playItem(ln.cur);};
+$('lnOpts').onclick=e=>{
+  const b=e.target.closest('.opt');if(!b||ln.answered||!ln.cur)return;
+  ln.answered=true;ln.n++;
+  if(b.dataset.g===ln.cur.gloss){ln.ok++;b.classList.add('right');$('lnFb').textContent='¡Correcto!';}
+  else{b.classList.add('wrong');[...$('lnOpts').children].forEach(x=>{if(x.dataset.g===ln.cur.gloss)x.classList.add('right');});$('lnFb').textContent='Era «'+ln.cur.word+'». Mírala otra vez.';playItem(ln.cur);}
+  $('lnScore').textContent=ln.ok+' de '+ln.n;
+};
+
+/* ---- Aprender: Hazla tú ---- */
+const dy={target:null,ok:0,n:0,on:false,stream:null,seg:null};
+function dyPick(){
+  const P=[...LIB.all.values()].filter(s=>!s.example);
+  if(!P.length){$('dyFb').textContent='Primero graba señas en «Grabar señas». Esta práctica usa tu biblioteca.';return;}
+  let t;do{t=P[Math.floor(Math.random()*P.length)];}while(P.length>1&&dy.target&&t===dy.target);
+  dy.target=t;$('dyWord').textContent=wordOf(t);$('dyFb').textContent=dy.on?'Haz la seña cuando quieras.':'Enciende la cámara y haz la seña.';
+}
+function dyStop(){dy.on=false;if(dy.stream){dy.stream.getTracks().forEach(t=>t.stop());dy.stream=null;}$('dyVid').srcObject=null;$('dyCam').textContent='Encender cámara';$('dyState').textContent='Cámara apagada';$('dyState').classList.remove('on');}
+function dyLoop(){
+  if(!dy.on)return;const v=$('dyVid');
+  if(v.readyState>=2&&DET&&v.videoWidth){const r=detect(v);drawOverlayOn($('dyOvl'),r);dy.seg(r,performance.now());}
+  if(v.requestVideoFrameCallback)v.requestVideoFrameCallback(dyLoop);else requestAnimationFrame(dyLoop);
+}
+$('dyNext').onclick=dyPick;
+$('dyShow').onclick=()=>{if(dy.target)playSign(dy.target);};
+$('dyCam').onclick=async()=>{
+  if(dy.on){dyStop();return;}
+  if(!dy.target)dyPick(); if(!dy.target)return;
+  try{dy.stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:960},height:{ideal:720},facingMode:'user'},audio:false});}
+  catch(e){$('dyFb').textContent='No se pudo abrir la cámara. Permite el acceso en el navegador.';return;}
+  const v=$('dyVid');v.srcObject=dy.stream;await v.play().catch(()=>{});
+  dy.on=true;$('dyCam').textContent='Apagar cámara';$('dyState').textContent='Cargando…';
+  try{await loadDetectors();}catch(e){$('dyFb').textContent=recStatusEl.textContent;return;}
+  dy.seg=makeSegmenter(seq=>{
+    const c=recognize(seq);if(!c.length||!dy.target)return;
+    dy.n++;const G=dy.target.gloss.toUpperCase(),pos=c.findIndex(x=>x.gloss===G);
+    if(pos===0&&c[0].d<THR()){dy.ok++;$('dyFb').textContent='¡Te salió! Toca «Otra palabra».';}
+    else if(pos>0)$('dyFb').textContent='Casi. Se pareció más a «'+wordOf(c[0].sign)+'». Inténtalo otra vez.';
+    else $('dyFb').textContent='No se parece todavía. Toca «Ver cómo se hace» y repite.';
+    $('dyScore').textContent=dy.ok+' de '+dy.n;
+  },s=>{$('dyState').textContent=s==='viendo'?'Viendo seña…':'Esperando seña';$('dyState').classList.toggle('on',s==='viendo');});
+  $('dyState').textContent='Esperando seña';$('dyFb').textContent='Haz la seña cuando quieras.';dyLoop();
+};
+
+/* ---- IA (API de Claude) ---- */
+const AI={key:'',model:'claude-haiku-4-5-20251001',voice:false,signs:false};
+try{Object.assign(AI,JSON.parse(localStorage.getItem('lsm-ai')||'{}'));}catch(e){}
+$('aiKey').value=AI.key;$('aiModel').value=AI.model;$('aiVoice').checked=AI.voice;$('aiSigns').checked=AI.signs;
+function aiSaveCfg(){AI.key=$('aiKey').value.trim();AI.model=$('aiModel').value.trim()||'claude-haiku-4-5-20251001';AI.voice=$('aiVoice').checked;AI.signs=$('aiSigns').checked;try{localStorage.setItem('lsm-ai',JSON.stringify(AI));}catch(e){}}
+async function askClaude(system,user){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':AI.key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:AI.model,max_tokens:300,system,messages:[{role:'user',content:user}]})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error((j.error&&j.error.message)||('Error '+r.status));
+  return(j.content||[]).map(c=>c.text||'').join('').trim();
+}
+function vocabList(){const w=new Set([...LIB.byWord.keys(),...Object.keys(WORDS),...Object.keys(PHRASES)]);return[...w].slice(0,600).join(', ');}
+const SYS_GLOSS='Ayudas a un avatar que interpreta español a Lengua de Señas Mexicana (LSM). Convierte la frase del usuario en una secuencia de glosas en un orden natural para la LSM: primero el tiempo y el lugar, luego el tema o sujeto y después la acción; las palabras de pregunta y la negación suelen ir al final. Omite artículos, preposiciones y el verbo ser/estar cuando no aportan. Usa los verbos en infinitivo. Siempre que puedas, usa palabras de este vocabulario, que tienen seña: {V}. Deja igual los nombres propios y las palabras sin equivalente (se deletrearán). Conserva ¿? si es pregunta. Responde solo con las glosas en minúsculas separadas por espacios, sin explicación.';
+const SYS_SENT='Recibes palabras reconocidas de Lengua de Señas Mexicana, en el orden de la LSM. Escribe en español natural la frase que la persona quiso decir, breve. Si hay varias lecturas, elige la más probable. Responde solo con la frase.';
+let aiChain=Promise.resolve();
+const enqueuePlain=enqueue;
+enqueue=function(text,fresh){
+  if(!(AI.voice&&AI.key&&text.trim()))return enqueuePlain(text,fresh);
+  const face=analyze(text).face;
+  aiChain=aiChain.then(()=>askClaude(SYS_GLOSS.replace('{V}',vocabList()),text)).then(g=>{const A=analyze(g);A.face=face;enqueueA(A,fresh);})
+    .catch(e=>{enqueuePlain(text,fresh);recStatus('La IA no respondió ('+e.message+'); usé la traducción directa.',true);});
+};
+$('rgSay').onclick=async()=>{
+  const words=sentence.join(' ');if(!words)return;
+  const sayAll=t=>{const was=$('rgSpeak').checked;$('rgSpeak').checked=true;speak(t);$('rgSpeak').checked=was;};
+  if(AI.signs&&AI.key){
+    $('rgHint').textContent='Armando la frase…';
+    try{const t=await askClaude(SYS_SENT,words);$('rgHint').textContent='En español: '+t;$('cvStatus').textContent='En español: '+t;sayAll(t);return;}
+    catch(e){$('rgHint').textContent='La IA no respondió ('+e.message+'). Digo las palabras tal cual.';}
+  }
+  sayAll(words);
+};
+$('aiSave').onclick=()=>{aiSaveCfg();$('aiState').textContent=AI.key?'Guardado en este dispositivo.':'Guardado. Sin clave, la IA queda apagada.';};
+$('aiForget').onclick=()=>{$('aiKey').value='';aiSaveCfg();$('aiState').textContent='Borré la clave de este dispositivo.';};
+$('aiTest').onclick=async()=>{aiSaveCfg();if(!AI.key){$('aiState').textContent='Primero pega tu clave.';return;}
+  $('aiState').textContent='Probando…';
+  try{const g=await askClaude(SYS_GLOSS.replace('{V}',vocabList()),'¿Mañana vas a comer en mi casa?');$('aiState').textContent='Funciona. «¿Mañana vas a comer en mi casa?» → '+g;}
+  catch(e){$('aiState').textContent='No funcionó: '+e.message;}};
+
+/* ---- Biblioteca compartida (Firebase) ---- */
+const FBV='https://www.gstatic.com/firebasejs/12.18.0/';
+const FB={db:null,auth:null,user:null,F:null,U:null,cfg:null,count:0};
+$('fbDomain').textContent=location.hostname||'tu-usuario.github.io';
+function parseCfg(txt){const o={};['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'].forEach(k=>{const m=txt.match(new RegExp(k+'["\']?\\s*:\\s*["\']([^"\']+)["\']'));if(m)o[k]=m[1];});return o.apiKey&&o.projectId?o:null;}
+const docId=id=>String(id).replace(/[\/]/g,'-').slice(0,300);
+function fbUI(){
+  const on=!!FB.db;
+  $('fbLogin').hidden=!on||!!FB.user;$('fbLogout').hidden=!FB.user;$('fbPush').hidden=!FB.user;
+  if(!on)return;
+  $('fbState').textContent=`Conectada al proyecto ${FB.cfg.projectId}. ${FB.count} señas en línea. `+(FB.user?`Entraste como ${FB.user.email}: lo que guardes se comparte.`:'Para agregar señas, entra con Google.');
+}
+async function fbConnect(cfg){
+  try{
+    const[A,F,U]=await Promise.all([import(FBV+'firebase-app.js'),import(FBV+'firebase-firestore.js'),import(FBV+'firebase-auth.js')]);
+    const app=A.initializeApp(cfg);FB.F=F;FB.U=U;FB.cfg=cfg;FB.db=F.getFirestore(app);FB.auth=U.getAuth(app);
+    U.onAuthStateChanged(FB.auth,u=>{FB.user=u;fbUI();});
+    F.onSnapshot(F.collection(FB.db,'signs'),snap=>{
+      FB.count=snap.size;
+      snap.docChanges().forEach(ch=>{
+        const id=ch.doc.id, d=ch.doc.data();
+        if(ch.type==='removed'){const c=LIB.all.get(id);if(c&&c.origin==='cloud')LIB.all.delete(id);return;}
+        try{const sg={id,gloss:d.gloss,words:d.words||[],fps:d.fps||20,source:d.source||'',created:d.created||'',frames:JSON.parse(d.frames),origin:'cloud'};if(d.example)sg.example=true;
+          const c=LIB.all.get(id);if(!c||c.origin!=='local'||(sg.created>=(c.created||'')))LIB.all.set(id,sg);}catch(e){}
+      });
+      indexLib();fbUI();
+    },err=>{$('fbState').textContent='No pude leer la biblioteca en línea: '+err.message;});
+    fbUI();
+  }catch(e){$('fbState').textContent='No se pudo conectar con Firebase: '+(e.message||e);}
+}
+async function fbPut(sg){
+  const F=FB.F;
+  await F.setDoc(F.doc(FB.db,'signs',docId(sg.id)),{gloss:sg.gloss,words:sg.words||[],fps:sg.fps||20,source:sg.source||'',example:!!sg.example,created:sg.created||new Date().toISOString(),frames:JSON.stringify(sg.frames),author:FB.user.email||''});
+}
+function fbErr(e){return e&&e.code==='permission-denied'?'tu correo no está en la lista de colaboradores (revisa las reglas de Firestore)':(e&&e.message)||String(e);}
+onSaved=sg=>{if(FB.db&&FB.user)fbPut(sg).then(()=>recStatus('Guardé '+sg.gloss+' y la compartí en línea.')).catch(e=>recStatus('Guardada en este dispositivo, pero no se pudo compartir: '+fbErr(e),true));};
+onDeleted=id=>{if(FB.db&&FB.user)FB.F.deleteDoc(FB.F.doc(FB.db,'signs',docId(id))).catch(()=>{});};
+$('fbLogin').onclick=()=>FB.U.signInWithPopup(FB.auth,new FB.U.GoogleAuthProvider()).catch(e=>{
+  $('fbState').textContent=e.code==='auth/unauthorized-domain'?'Falta agregar '+location.hostname+' en Authentication → Configuración → Dominios autorizados.':'No se pudo entrar: '+(e.message||e.code);});
+$('fbLogout').onclick=()=>FB.U.signOut(FB.auth);
+$('fbPush').onclick=async()=>{const mine=[...LIB.all.values()].filter(s=>s.origin!=='cloud');let ok=0,err='';
+  for(const s of mine){try{await fbPut(s);ok++;}catch(e){err=fbErr(e);break;}}
+  $('fbState').textContent=err?`Subí ${ok} de ${mine.length}. Se detuvo: ${err}.`:`Subí ${ok} señas a la biblioteca compartida.`;};
+$('fbMake').onclick=()=>{
+  const cfg=parseCfg($('fbConfig').value);
+  if(!cfg){$('fbState').textContent='No encontré apiKey y projectId en lo que pegaste. Copia el bloque firebaseConfig completo.';return;}
+  const emails=$('fbEmails').value.split(',').map(x=>x.trim()).filter(Boolean);
+  if(!emails.length){$('fbState').textContent='Escribe al menos un correo que pueda agregar señas.';return;}
+  $('fbJson').textContent=JSON.stringify(cfg,null,2);
+  $('fbRules').textContent="rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /signs/{id} {\n      allow read: if true;\n      allow write: if request.auth != null\n        && request.auth.token.email in ["+emails.map(e=>"'"+e.replace(/'/g,'')+"'").join(', ')+"];\n    }\n  }\n}";
+  $('fbOut').hidden=false;
+  try{localStorage.setItem('lsm-fbcfg',JSON.stringify(cfg));}catch(e){}
+  if(!FB.db)fbConnect(cfg);
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;const t=$(b.dataset.copy).textContent;
+  const done=()=>{b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar',1500);};
+  if(navigator.clipboard)navigator.clipboard.writeText(t).then(done,()=>{const r=document.createRange();r.selectNodeContents($(b.dataset.copy));const s=getSelection();s.removeAllRanges();s.addRange(r);});});
+(async()=>{
+  let cfg=null;
+  try{const r=await fetch('firebase-config.json',{cache:'no-cache'});if(r.ok)cfg=await r.json();}catch(e){}
+  if(!cfg)try{cfg=JSON.parse(localStorage.getItem('lsm-fbcfg')||'null');}catch(e){}
+  if(cfg&&cfg.apiKey&&cfg.projectId)fbConnect(cfg);
+})();
+
+/* ---- App instalable ---- */
+if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)$('pwaState').textContent='Ya la estás usando como app.';
+if('serviceWorker' in navigator&&location.protocol==='https:'&&/github\.io$|netlify\.app$/.test(location.hostname))
+  navigator.serviceWorker.register('sw.js').then(()=>{if(!$('pwaState').textContent)$('pwaState').textContent='Lista para instalarse y funcionar sin internet con lo ya descargado.';}).catch(()=>{});
+
+try{const t=localStorage.getItem('lsm-tab');if(t&&t!=='traducir'&&$('tab-'+t))showTab(t);}catch(e){}
+
+setTimeout(()=>{heard(txt.value);enqueuePlain(txt.value,true);},700);
 })();
 </script>
 </body>
