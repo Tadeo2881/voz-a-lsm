@@ -243,6 +243,44 @@ body.obs .rg{display:none}
 .conv-cam .rec-view{border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .conv-cam .rec-empty{display:none}
 body.conv-on{overflow:hidden}
+/* Frases rápidas */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg-b{font:700 13px var(--f-body);border:0;border-radius:999px;padding:6px 12px;background:transparent;color:var(--muted);cursor:pointer}
+.seg-b[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.phrases{display:flex;flex-wrap:wrap;gap:8px}
+.ph{display:inline-flex;align-items:center;gap:6px;font:15px var(--f-body);padding:9px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;text-align:left}
+.ph:hover{border-color:var(--accent)}
+.ph .x{display:none;font-weight:700;color:var(--muted);padding:0 2px}
+.editing .ph .x{display:inline}
+.edit-ph summary{font-size:14px}
+#phNew{flex:1;min-width:0;font:16px var(--f-body);padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.edit-ph[open]{display:grid;gap:8px}
+.linkbtn{font:inherit;border:0;background:none;color:var(--accent);text-decoration:underline;cursor:pointer;padding:0}
+.conv-ph{display:flex;flex-wrap:wrap;gap:6px;max-height:30%;overflow:auto}
+.conv-ph .ph{font-size:14px;padding:7px 11px}
+/* Historial */
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:260px;overflow:auto}
+.hist li{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:8px;align-items:baseline;font-size:15px}
+.hist time{font:12px var(--f-gloss);color:var(--muted);font-variant-numeric:tabular-nums}
+.hist .who{font:700 11px var(--f-body);text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+.hist .who.s{border-color:var(--accent);color:var(--accent)}
+.hist-empty{color:var(--muted);display:block!important}
+/* Señas que faltan */
+.miss{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:320px;overflow:auto}
+.miss li{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.miss b{flex:1;font-family:var(--f-gloss);font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.miss .n{font:13px var(--f-gloss);color:var(--muted);font-variant-numeric:tabular-nums}
+/* Accesibilidad */
+html.big body{font-size:19px}
+html.big #nowGloss{font-size:36px}
+html.big .heard{font-size:21px}
+html.big .gloss{font-size:18px}
+html.big .ph{font-size:18px}
+html.big .rg-word{font-size:clamp(44px,8vw,72px)}
+html.hc{--bg:#FFFFFF;--surface:#FFFFFF;--ink:#000000;--muted:#1F1F1F;--line:#000000;--accent:#0033CC;--accent-ink:#FFFFFF;--stage:#DDE6F5}
+@media (prefers-color-scheme: dark){html.hc:not([data-theme="light"]){--bg:#000000;--surface:#000000;--ink:#FFFFFF;--muted:#E6E6E6;--line:#FFFFFF;--accent:#9DB7FF;--accent-ink:#000000;--stage:#1A2438}}
+html.hc[data-theme="dark"]{--bg:#000000;--surface:#000000;--ink:#FFFFFF;--muted:#E6E6E6;--line:#FFFFFF;--accent:#9DB7FF;--accent-ink:#000000;--stage:#1A2438}
+html.hc .btn,html.hc .chip,html.hc .ph,html.hc .tok{border-width:2px}
 @media (prefers-reduced-motion: reduce){#mic[aria-pressed="true"] .dot{animation:none}}
 </style>
 <style>body{margin:0}</style>
@@ -307,6 +345,16 @@ body.conv-on{overflow:hidden}
         </div>
       </div>
 
+      <div class="card" id="phrasesCard">
+        <div class="learn-head"><h2>Frases rápidas</h2>
+          <div class="seg" role="group" aria-label="Paquete de frases"><button class="seg-b" data-pack="publico" aria-pressed="true">Atención al público</button><button class="seg-b" data-pack="escuela" aria-pressed="false">Escuela</button></div></div>
+        <div class="phrases" id="phrases"></div>
+        <details class="edit-ph"><summary>Editar frases</summary>
+          <div class="input-row"><input id="phNew" type="text" autocomplete="off" placeholder="Escribe una frase nueva"><button class="btn" id="phAdd">Agregar</button></div>
+          <p class="legend">Toca la × de una frase para quitarla. <button class="linkbtn" id="phReset">Volver a las frases originales</button></p>
+        </details>
+      </div>
+
       <div class="card">
         <h2>Glosa</h2>
         <div class="gloss" id="gloss"></div>
@@ -320,6 +368,13 @@ body.conv-on{overflow:hidden}
           <div class="vocab" id="vocab"></div>
         </details>
       </div>
+      <div class="card" id="histCard">
+        <div class="learn-head"><h2>Historial</h2><span class="score" id="histCount">0</span></div>
+        <ol class="hist" id="hist"><li class="hist-empty">Aquí queda lo que se dice en los dos sentidos.</li></ol>
+        <div class="rec-tools"><button class="btn sm" id="histCopy">Copiar</button><button class="btn sm" id="histDown">Descargar .txt</button><button class="btn sm ghost" id="histClear">Borrar</button></div>
+        <p class="legend">Solo se guarda mientras la página está abierta. Al cerrarla se borra, para cuidar la privacidad de las personas que atiendes.</p>
+      </div>
+
     </div>
   </div>
 
@@ -381,6 +436,12 @@ body.conv-on{overflow:hidden}
   </div>
 
   <div class="tab" id="tab-grabar" hidden>
+  <section class="card" id="missCard">
+    <div class="learn-head"><h2>Señas que faltan</h2><span class="score" id="missCount"></span></div>
+    <p class="legend">Palabras que el avatar tuvo que deletrear porque no tienen seña, de la más usada a la menos. Graba primero las de arriba. Oculta los nombres propios para que no estorben.</p>
+    <ol class="miss" id="missList"></ol>
+    <div class="rec-tools"><button class="btn sm ghost" id="missClear">Vaciar la lista</button></div>
+  </section>
   <section class="card rec" id="recorder" aria-labelledby="recTitle">
     <div class="rec-head">
       <h2 id="recTitle">Grabadora de señas</h2>
@@ -456,6 +517,13 @@ body.conv-on{overflow:hidden}
       </section>
 
       <section class="card">
+        <h2>Accesibilidad</h2>
+        <label class="check" for="a11yBig"><input type="checkbox" id="a11yBig"> Letra grande</label>
+        <label class="check" for="a11yContrast"><input type="checkbox" id="a11yContrast"> Alto contraste</label>
+        <label class="check" for="a11ySound"><input type="checkbox" id="a11ySound" checked> Sonido y vibración cuando reconoce una seña (la vibración solo en Android)</label>
+      </section>
+
+      <section class="card">
         <h2>Instalar como app</h2>
         <p class="legend">En iPad o iPhone: abre la página en Safari, toca Compartir (el cuadro con la flecha) y elige «Agregar a pantalla de inicio». En Chrome o Edge de computadora: toca el ícono de instalar en la barra de direcciones. Se abre a pantalla completa y lo ya descargado funciona sin internet.</p>
         <p class="legend" id="pwaState"></p>
@@ -521,6 +589,8 @@ body.conv-on{overflow:hidden}
     <p class="conv-word" id="cvWord">—</p>
     <p class="conv-sent" id="cvSentence">Las palabras aparecen aquí.</p>
     <p class="conv-label" id="cvStatus"></p>
+    <p class="conv-label">Frases rápidas</p>
+    <div class="conv-ph" id="cvPhrases"></div>
   </div>
   <div class="conv-half conv-deaf">
     <div id="convSlot"></div>
@@ -883,6 +953,7 @@ let loopGen=0;
 function startLoop(){const g=++loopGen;const f=now=>{if(g!==loopGen)return;tick(now);raf(f);};raf(f);}
 let enqueue=function(text,fresh){enqueueA(analyze(text),fresh);};
 function enqueueA(A,fresh){
+  trackMissing(A);
   if(fresh){clearGloss();keys=[];ki=0;playing=false;}
   if(!A.toks.length){emptyGloss();return;}
   const base=tokSeq; tokSeq+=A.toks.length;
@@ -936,7 +1007,7 @@ function startListening(){
     rec.onresult=e=>{
       let interim='';
       for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];
-        if(r.isFinal){const t=r[0].transcript.trim();if(t){heard(t,false);txt.value=t;enqueue(t,false);}}
+        if(r.isFinal){const t=r[0].transcript.trim();if(t){heard(t,false);txt.value=t;enqueue(t,false);logHist('voz',t);}}
         else interim+=r[0].transcript;}
       if(interim.trim())heard(interim.trim(),true);
     };
@@ -1182,6 +1253,7 @@ let capture=null;
 const srcIn=$('recSource'); try{srcIn.value=localStorage.getItem('lsm-source')||'';}catch(e){}
 srcIn.addEventListener('change',()=>{try{localStorage.setItem('lsm-source',srcIn.value);}catch(e){}});
 function showReview(res,gloss){
+  if(!gloss&&pendingGloss){gloss=pendingGloss.toUpperCase();pendingGloss='';}
   if(res.error){recStatus(res.error,true);return;}
   capture=res;
   const n=res.frames.length, A=$('trimA'), B=$('trimB');
@@ -1378,7 +1450,7 @@ function renderCands(c,accepted){
 }
 $('rgCands').addEventListener('click',e=>{
   const b=e.target.closest('.cand');if(!b||!lastCands)return;const c=lastCands[+b.dataset.i];
-  if(lastCands.accepted)sentence[sentence.length-1]=wordOf(c.sign);else{sentence.push(wordOf(c.sign));lastCands.accepted=true;}
+  if(lastCands.accepted){sentence[sentence.length-1]=wordOf(c.sign);histReplaceLastWord(wordOf(c.sign));}else{sentence.push(wordOf(c.sign));lastCands.accepted=true;logHist('señas',wordOf(c.sign));}
   $('rgWord').textContent=wordOf(c.sign);renderSentence();speak(wordOf(c.sign));
   [...$('rgCands').children].forEach((x,i)=>x.classList.toggle('top',i===+b.dataset.i));
 });
@@ -1387,7 +1459,7 @@ function onSign(seq){
   if(!c.length){$('rgWord').textContent='—';$('rgHint').textContent='Tu biblioteca todavía no tiene señas grabadas.';return;}
   const ok=c[0].d<THR()&&(c.length<2||c[1].d-c[0].d>0.04||c[0].d<THR()*.6);
   c.accepted=ok; renderCands(c,ok);
-  if(ok){const w=wordOf(c[0].sign);sentence.push(w);$('rgWord').textContent=w;$('rgHint').textContent='Si no era esa, toca la correcta abajo.';renderSentence();speak(w);}
+  if(ok){const w=wordOf(c[0].sign);sentence.push(w);logHist('señas',w);feedback();$('rgWord').textContent=w;$('rgHint').textContent='Si no era esa, toca la correcta abajo.';renderSentence();speak(w);}
   else{$('rgWord').textContent='¿?';$('rgHint').textContent='No estoy seguro. Toca la palabra correcta o repite la seña.';}
 }
 function onState(s){const el=$('rgState');el.textContent=s==='viendo'?'Viendo seña…':'Esperando seña';el.classList.toggle('on',s==='viendo');}
@@ -1533,7 +1605,7 @@ $('dyCam').onclick=async()=>{
   dy.seg=makeSegmenter(seq=>{
     const c=recognize(seq);if(!c.length||!dy.target)return;
     dy.n++;const G=dy.target.gloss.toUpperCase(),pos=c.findIndex(x=>x.gloss===G);
-    if(pos===0&&c[0].d<THR()){dy.ok++;$('dyFb').textContent='¡Te salió! Toca «Otra palabra».';}
+    if(pos===0&&c[0].d<THR()){dy.ok++;feedback();$('dyFb').textContent='¡Te salió! Toca «Otra palabra».';}
     else if(pos>0)$('dyFb').textContent='Casi. Se pareció más a «'+wordOf(c[0].sign)+'». Inténtalo otra vez.';
     else $('dyFb').textContent='No se parece todavía. Toca «Ver cómo se hace» y repite.';
     $('dyScore').textContent=dy.ok+' de '+dy.n;
@@ -1569,7 +1641,7 @@ $('rgSay').onclick=async()=>{
   const sayAll=t=>{const was=$('rgSpeak').checked;$('rgSpeak').checked=true;speak(t);$('rgSpeak').checked=was;};
   if(AI.signs&&AI.key){
     $('rgHint').textContent='Armando la frase…';
-    try{const t=await askClaude(SYS_SENT,words);$('rgHint').textContent='En español: '+t;$('cvStatus').textContent='En español: '+t;sayAll(t);return;}
+    try{const t=await askClaude(SYS_SENT,words);HIST.push({who:'señas',text:'En español: '+t,t:new Date(),closed:true});renderHist();$('rgHint').textContent='En español: '+t;$('cvStatus').textContent='En español: '+t;sayAll(t);return;}
     catch(e){$('rgHint').textContent='La IA no respondió ('+e.message+'). Digo las palabras tal cual.';}
   }
   sayAll(words);
@@ -1652,7 +1724,106 @@ if('serviceWorker' in navigator&&location.protocol==='https:'&&/github\.io$|netl
 
 try{const t=localStorage.getItem('lsm-tab');if(t&&t!=='traducir'&&$('tab-'+t))showTab(t);}catch(e){}
 
-setTimeout(()=>{heard(txt.value);enqueuePlain(txt.value,true);},700);
+/* ---- Frases rápidas ---- */
+const PH_DEF={
+  publico:['Buenos días, ¿en qué le puedo ayudar?','Espere un momento, por favor','¿Me permite su identificación?','Por favor, llene este formato','Firme aquí, por favor','Su turno es el siguiente','Pase a la ventanilla','El trámite está listo','Regrese mañana, por favor','No entendí, ¿puede repetir?','¿Tiene alguna pregunta?','Gracias por su visita'],
+  escuela:['Buenos días, grupo','Pongan atención, por favor','Abran su libro','Saquen su cuaderno','Trabajen en equipo','¿Tienen alguna duda?','Muy bien, excelente trabajo','La tarea es para mañana','Hoy hay examen','Levanten la mano para participar','Pueden salir al recreo','Nos vemos mañana']
+};
+let PH={}, phPack='publico';
+try{PH=JSON.parse(localStorage.getItem('lsm-phrases')||'{}')||{};phPack=localStorage.getItem('lsm-pack')||'publico';}catch(e){}
+['publico','escuela'].forEach(k=>{if(!Array.isArray(PH[k]))PH[k]=PH_DEF[k].slice();});
+if(!PH[phPack])phPack='publico';
+function savePH(){try{localStorage.setItem('lsm-phrases',JSON.stringify(PH));localStorage.setItem('lsm-pack',phPack);}catch(e){}}
+function renderPH(){
+  const L=PH[phPack];
+  $('phrases').innerHTML=L.length?L.map((t,i)=>`<button class="ph" data-i="${i}"><span>${esc(t)}</span><span class="x" data-x="${i}" aria-label="Quitar">×</span></button>`).join(''):'<p class="legend">No hay frases. Agrega una en «Editar frases».</p>';
+  $('cvPhrases').innerHTML=L.map((t,i)=>`<button class="ph" data-i="${i}">${esc(t)}</button>`).join('');
+  document.querySelectorAll('.seg-b').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pack===phPack)));
+}
+function sayPhrase(t){txt.value=t;heard(t);enqueue(t,true);logHist('voz',t);}
+$('phrases').onclick=e=>{
+  const x=e.target.closest('[data-x]');
+  if(x&&$('phrasesCard').classList.contains('editing')){PH[phPack].splice(+x.dataset.x,1);savePH();renderPH();return;}
+  const b=e.target.closest('.ph');if(b)sayPhrase(PH[phPack][+b.dataset.i]);
+};
+$('cvPhrases').onclick=e=>{const b=e.target.closest('.ph');if(b)sayPhrase(PH[phPack][+b.dataset.i]);};
+document.querySelectorAll('.seg-b').forEach(b=>b.onclick=()=>{phPack=b.dataset.pack;savePH();renderPH();});
+document.querySelector('.edit-ph').addEventListener('toggle',e=>$('phrasesCard').classList.toggle('editing',e.target.open));
+$('phAdd').onclick=()=>{const t=$('phNew').value.trim();if(!t)return;PH[phPack].push(t);$('phNew').value='';savePH();renderPH();};
+$('phNew').addEventListener('keydown',e=>{if(e.key==='Enter')$('phAdd').click();});
+$('phReset').onclick=()=>{PH[phPack]=PH_DEF[phPack].slice();savePH();renderPH();};
+renderPH();
+
+/* ---- Historial (solo en memoria) ---- */
+const HIST=[];
+const hhmm=d=>d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+function logHist(who,text){
+  text=String(text||'').trim();if(!text)return;
+  const now=new Date(), last=HIST[HIST.length-1];
+  if(who==='señas'&&last&&last.who==='señas'&&!last.closed&&now-last.t<20000){last.text+=' '+text;last.t=now;}
+  else HIST.push({who,text,t:now});
+  renderHist();
+}
+function histReplaceLastWord(w){const last=HIST[HIST.length-1];if(last&&last.who==='señas'&&!last.closed){last.text=last.text.replace(/\S+$/,w);renderHist();}else logHist('señas',w);}
+function renderHist(){
+  const el=$('hist');
+  el.innerHTML=HIST.length?HIST.map(h=>`<li><time>${hhmm(h.t)}</time><span class="who ${h.who==='señas'?'s':''}">${h.who==='voz'?'Voz':'Señas'}</span><span>${esc(h.text)}</span></li>`).join(''):'<li class="hist-empty">Aquí queda lo que se dice en los dos sentidos.</li>';
+  el.scrollTop=el.scrollHeight;$('histCount').textContent=HIST.length;
+}
+const histText=()=>HIST.map(h=>`[${hhmm(h.t)}] ${h.who==='voz'?'Voz':'Señas'}: ${h.text}`).join('\n');
+$('histCopy').onclick=()=>{const t=histText();if(!t)return;const b=$('histCopy');
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar',1500);},()=>{b.textContent='No se pudo copiar';});};
+$('histDown').onclick=()=>{const t=histText();if(!t)return;const d=new Date(),a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['Conversación del '+d.toLocaleDateString('es-MX')+'\n\n'+t+'\n'],{type:'text/plain;charset=utf-8'}));
+  a.download='conversacion-'+d.toISOString().slice(0,16).replace(/[T:]/g,'-')+'.txt';document.body.appendChild(a);a.click();a.remove();};
+$('histClear').onclick=()=>{HIST.length=0;renderHist();};
+['go'].forEach(id=>$(id).addEventListener('click',()=>logHist('voz',txt.value)));
+txt.addEventListener('keydown',e=>{if(e.key==='Enter')logHist('voz',txt.value);});
+document.querySelectorAll('#examples .chip').forEach(b=>b.addEventListener('click',()=>logHist('voz',b.textContent)));
+
+/* ---- Señas que faltan ---- */
+let MISS={}, MISSHIDE=[], trackOn=false, pendingGloss='';
+try{MISS=JSON.parse(localStorage.getItem('lsm-miss')||'{}')||{};MISSHIDE=JSON.parse(localStorage.getItem('lsm-misshide')||'[]')||[];}catch(e){}
+function saveMiss(){try{localStorage.setItem('lsm-miss',JSON.stringify(MISS));localStorage.setItem('lsm-misshide',JSON.stringify(MISSHIDE));}catch(e){}}
+function trackMissing(A){
+  if(!trackOn)return;let ch=false;
+  A.toks.forEach(t=>{if(t.type==='spell'&&t.gloss.length>1&&!MISSHIDE.includes(t.gloss)){MISS[t.gloss]=(MISS[t.gloss]||0)+1;ch=true;}});
+  if(ch){saveMiss();renderMiss();}
+}
+function renderMiss(){
+  const L=Object.entries(MISS).filter(([w])=>!LIB.byWord.has(w)&&!WORDS[w]&&!MISSHIDE.includes(w)).sort((a,b)=>b[1]-a[1]).slice(0,40);
+  $('missCount').textContent=L.length?L.length+' palabras':'';
+  $('missList').innerHTML=L.length?L.map(([w,n])=>`<li><b>${esc(w)}</b><span class="n">×${n}</span><button class="btn sm" data-rec="${esc(w)}">Grabar</button><button class="btn sm ghost" data-hide="${esc(w)}">Ocultar</button></li>`).join('')
+    :'<li class="lib-empty">Todavía nada. Cuando el avatar deletree una palabra, aparecerá aquí.</li>';
+}
+$('missList').onclick=e=>{
+  const r=e.target.closest('[data-rec]'),h=e.target.closest('[data-hide]');
+  if(h){MISSHIDE.push(h.dataset.hide);saveMiss();renderMiss();}
+  if(r){pendingGloss=r.dataset.rec;$('recorder').scrollIntoView({behavior:'smooth'});recStatus('Graba la seña de «'+pendingGloss+'». Al terminar, el nombre ya estará escrito.');}
+};
+$('missClear').onclick=()=>{MISS={};saveMiss();renderMiss();};
+const _indexLib=indexLib; indexLib=function(){_indexLib();renderMiss();};
+renderMiss();
+
+/* ---- Accesibilidad ---- */
+const A11Y={big:false,contrast:false,sound:true};
+try{Object.assign(A11Y,JSON.parse(localStorage.getItem('lsm-a11y')||'{}'));}catch(e){}
+function applyA11y(){document.documentElement.classList.toggle('big',A11Y.big);document.documentElement.classList.toggle('hc',A11Y.contrast);
+  $('a11yBig').checked=A11Y.big;$('a11yContrast').checked=A11Y.contrast;$('a11ySound').checked=A11Y.sound;try{localStorage.setItem('lsm-a11y',JSON.stringify(A11Y));}catch(e){}}
+$('a11yBig').onchange=()=>{A11Y.big=$('a11yBig').checked;applyA11y();};
+$('a11yContrast').onchange=()=>{A11Y.contrast=$('a11yContrast').checked;applyA11y();};
+$('a11ySound').onchange=()=>{A11Y.sound=$('a11ySound').checked;applyA11y();};
+applyA11y();
+let actx=null;
+document.addEventListener('pointerdown',()=>{try{if(!actx)actx=new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();}catch(e){}},{passive:true});
+function feedback(){
+  if(!A11Y.sound)return;
+  try{if(navigator.vibrate)navigator.vibrate(60);}catch(e){}
+  try{if(!actx)return;const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=880;g.gain.setValueAtTime(.0001,actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.12,actx.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+.18);o.connect(g).connect(actx.destination);o.start();o.stop(actx.currentTime+.2);}catch(e){}
+}
+
+setTimeout(()=>{heard(txt.value);enqueuePlain(txt.value,true);trackOn=true;},700);
 })();
 </script>
 </body>
